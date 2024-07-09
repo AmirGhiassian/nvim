@@ -12,4 +12,5 @@ return {
   "mg979/vim-visual-multi",
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   "mg979/vim-visual-multi",
+  "ThePrimeagen/vim-be-good",
 }
