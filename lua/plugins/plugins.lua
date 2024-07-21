@@ -12,4 +12,5 @@ return {
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   "mg979/vim-visual-multi",
   "ThePrimeagen/vim-be-good",
+  "s1n7ax/nvim-window-picker",
 }
