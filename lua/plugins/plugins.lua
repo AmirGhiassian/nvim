@@ -13,4 +13,5 @@ return {
   "mg979/vim-visual-multi",
   "ThePrimeagen/vim-be-good",
   "kmontocam/nvim-conda",
+  "s1n7ax/nvim-window-picker",
 }
