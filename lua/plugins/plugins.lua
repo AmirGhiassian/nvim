@@ -13,4 +13,5 @@ return {
   "kmontocam/nvim-conda",
   "s1n7ax/nvim-window-picker",
   "MunifTanjim/prettier.nvim",
+  "andweeb/presence.nvim",
 }
