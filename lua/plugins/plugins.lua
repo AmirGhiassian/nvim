@@ -6,7 +6,6 @@ return {
       colorscheme = "moonfly",
     },
   },
-  "mg979/vim-visual-multi",
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   "mg979/vim-visual-multi",
   "ThePrimeagen/vim-be-good",
@@ -14,4 +13,5 @@ return {
   "s1n7ax/nvim-window-picker",
   "MunifTanjim/prettier.nvim",
   "andweeb/presence.nvim",
+  "MeF0504/vim-pets",
 }
