@@ -9,6 +9,9 @@ require("mcphub").setup({
       make_vars = true, -- make chat #variables from MCP server resources
       make_slash_commands = true, -- make /slash_commands from MCP server prompts
     },
+    avante = {
+      make_slash_commands = true, -- make /slash commands from MCP server prompts
+    },
   },
 })
 
@@ -24,14 +27,6 @@ require("codecompanion").setup({
           description = "Call tools and resources from the MCP Servers",
         },
       },
-    },
-  },
-})
-
-require("mcphub").setup({
-  extensions = {
-    avante = {
-      make_slash_commands = true, -- make /slash commands from MCP server prompts
     },
   },
 })

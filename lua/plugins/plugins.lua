@@ -1,5 +1,6 @@
 return {
   { "bluz71/vim-moonfly-colors", name = "moonfly", lazy = false, priority = 1000 },
+  { "pmizio/typescript-tools.nvim" },
   {
     "LazyVim/LazyVim",
     opts = {
@@ -117,4 +118,6 @@ return {
     },
   },
   "pimalaya/himalaya-vim",
+  "mason-org/mason-lspconfig.nvim",
+  "neovim/nvim-lspconfig",
 }
