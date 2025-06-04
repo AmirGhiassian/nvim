@@ -8,6 +8,20 @@ return {
       colorscheme = "nightfox",
     },
   },
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      {
+        "SmiteshP/nvim-navbuddy",
+        dependencies = {
+          "SmiteshP/nvim-navic",
+          "MunifTanjim/nui.nvim",
+        },
+        opts = { lsp = { auto_attach = true } },
+      },
+    },
+    -- your lsp config or other stuff
+  },
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   "mg979/vim-visual-multi",
   "https://github.com/kdheepak/lazygit.nvim.git",
@@ -24,6 +38,17 @@ return {
     config = function()
       require("mcphub").setup()
     end,
+  },
+  {
+    "stevearc/oil.nvim",
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
   },
   {
     "olimorris/codecompanion.nvim",
