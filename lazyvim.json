@@ -10,6 +10,7 @@
     "lazyvim.plugins.extras.coding.yanky",
     "lazyvim.plugins.extras.dap.core",
     "lazyvim.plugins.extras.dap.nlua",
+    "lazyvim.plugins.extras.editor.aerial",
     "lazyvim.plugins.extras.editor.dial",
     "lazyvim.plugins.extras.editor.fzf",
     "lazyvim.plugins.extras.editor.harpoon2",
@@ -20,8 +21,10 @@
     "lazyvim.plugins.extras.editor.mini-files",
     "lazyvim.plugins.extras.editor.mini-move",
     "lazyvim.plugins.extras.editor.navic",
+    "lazyvim.plugins.extras.editor.overseer",
     "lazyvim.plugins.extras.editor.snacks_explorer",
     "lazyvim.plugins.extras.editor.snacks_picker",
+    "lazyvim.plugins.extras.editor.telescope",
     "lazyvim.plugins.extras.formatting.biome",
     "lazyvim.plugins.extras.formatting.black",
     "lazyvim.plugins.extras.formatting.prettier",
@@ -48,12 +51,12 @@
     "lazyvim.plugins.extras.ui.mini-animate",
     "lazyvim.plugins.extras.ui.mini-indentscope",
     "lazyvim.plugins.extras.ui.smear-cursor",
-    "lazyvim.plugins.extras.util.chezmoi",
     "lazyvim.plugins.extras.util.dot",
     "lazyvim.plugins.extras.util.mini-hipatterns",
     "lazyvim.plugins.extras.util.project",
     "lazyvim.plugins.extras.util.rest",
-    "lazyvim.plugins.extras.util.startuptime"
+    "lazyvim.plugins.extras.util.startuptime",
+    "lazyvim.plugins.extras.vscode"
   ],
   "news": {
     "NEWS.md": "10960"

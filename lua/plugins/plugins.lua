@@ -1,6 +1,7 @@
 return {
   { "bluz71/vim-moonfly-colors", name = "moonfly", lazy = false, priority = 1000 },
-
+  "https://github.com/eatgrass/maven.nvim",
+  "https://github.com/mfussenegger/nvim-jdtls",
   { "pmizio/typescript-tools.nvim" },
   "EdenEast/nightfox.nvim",
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -222,6 +223,47 @@ return {
       editor_only_render_when_focused = false,
       tmux_show_only_in_active_window = false,
       hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" },
+    },
+  },
+  {
+    "EthanJWright/vs-tasks.nvim",
+    dependencies = {
+      "nvim-lua/popup.nvim",
+      "nvim-lua/plenary.nvim",
+      "folke/snacks.nvim",
+    },
+    opts = {
+      picker = "telescope", -- Use snacks.nvim picker instead of telescope
+    },
+    config = function()
+      require("telescope").load_extension("vstask")
+    end,
+    autodetect = { -- auto load scripts
+      npm = "on",
+    },
+    keys = {
+      {
+        "<leader>ct",
+        "<cmd>lua require('telescope').extensions.vstask.tasks()<cr>",
+        desc = "Run VS Task",
+      },
+      terminal = "toggleterm",
+      term_opts = {
+        vertical = {
+          direction = "vertical",
+          size = "80",
+        },
+        horizontal = {
+          direction = "horizontal",
+          size = "10",
+        },
+        current = {
+          direction = "float",
+        },
+        tab = {
+          direction = "tab",
+        },
+      },
     },
   },
 }
