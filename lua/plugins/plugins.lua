@@ -86,7 +86,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
-      "echasnovski/mini.pick",
+      "nvim-mini/mini.pick",
       "nvim-telescope/telescope.nvim",
       "ibhagwan/fzf-lua",
       "folke/snacks.nvim",
@@ -187,7 +187,7 @@ return {
   {
     "stevearc/oil.nvim",
     opts = {},
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
     lazy = false,
   },
 
