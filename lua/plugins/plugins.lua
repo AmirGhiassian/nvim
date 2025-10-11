@@ -1,6 +1,5 @@
 return {
   { "bluz71/vim-moonfly-colors", name = "moonfly", lazy = false, priority = 1000 },
-
   { "pmizio/typescript-tools.nvim" },
   "EdenEast/nightfox.nvim",
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -10,14 +9,6 @@ return {
   "kmontocam/nvim-conda",
   "s1n7ax/nvim-window-picker",
   "MunifTanjim/prettier.nvim",
-
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "nightfox",
-      defaults = { autocmds = true, keymaps = true, options = true },
-    },
-  },
 
   {
     "SmiteshP/nvim-navbuddy",
