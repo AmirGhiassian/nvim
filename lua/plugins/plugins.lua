@@ -1,5 +1,7 @@
 return {
   { "bluz71/vim-moonfly-colors", name = "moonfly", lazy = false, priority = 1000 },
+  "https://github.com/eatgrass/maven.nvim",
+  "https://github.com/mfussenegger/nvim-jdtls",
   { "pmizio/typescript-tools.nvim" },
   "EdenEast/nightfox.nvim",
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -24,6 +26,12 @@ return {
         opts.ensure_installed = opts.ensure_installed or {}
         vim.list_extend(opts.ensure_installed, { "http" })
       end,
+    },
+  },
+  {
+    "vhyrro/luarocks.nvim",
+    opts = {
+      rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }, -- Specify LuaRocks packages to install
     },
   },
 
@@ -76,7 +84,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
-      "echasnovski/mini.pick",
+      "nvim-mini/mini.pick",
       "nvim-telescope/telescope.nvim",
       "ibhagwan/fzf-lua",
       "folke/snacks.nvim",
@@ -177,7 +185,7 @@ return {
   {
     "stevearc/oil.nvim",
     opts = {},
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
     lazy = false,
   },
 
@@ -215,4 +223,46 @@ return {
       hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" },
     },
   },
+  {
+    "EthanJWright/vs-tasks.nvim",
+    dependencies = {
+      "nvim-lua/popup.nvim",
+      "nvim-lua/plenary.nvim",
+      "folke/snacks.nvim",
+    },
+    opts = {
+      picker = "telescope", -- Use snacks.nvim picker instead of telescope
+    },
+    config = function()
+      require("telescope").load_extension("vstask")
+    end,
+    autodetect = { -- auto load scripts
+      npm = "on",
+    },
+    keys = {
+      {
+        "<leader>ct",
+        "<cmd>lua require('telescope').extensions.vstask.tasks()<cr>",
+        desc = "Run VS Task",
+      },
+      terminal = "toggleterm",
+      term_opts = {
+        vertical = {
+          direction = "vertical",
+          size = "80",
+        },
+        horizontal = {
+          direction = "horizontal",
+          size = "10",
+        },
+        current = {
+          direction = "float",
+        },
+        tab = {
+          direction = "tab",
+        },
+      },
+    },
+  },
+  "j-hui/fidget.nvim",
 }
