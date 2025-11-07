@@ -265,4 +265,5 @@ return {
     },
   },
   "j-hui/fidget.nvim",
+  "andweeb/presence.nvim",
 }
