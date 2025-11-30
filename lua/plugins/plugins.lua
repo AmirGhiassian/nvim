@@ -192,6 +192,7 @@ return {
   {
     "olimorris/codecompanion.nvim",
     opts = {},
+    version = "17.33.0",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter" },
   },
 
