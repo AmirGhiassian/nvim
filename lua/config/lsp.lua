@@ -12,3 +12,9 @@ vim.lsp.handlers["client/registerCapability"] = function(err, result, ctx, confi
   end
   return orig(err, result, ctx, config)
 end
+
+require("lspconfig").tsserver.setup({
+  on_attach = function(client, bufnr)
+    require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+  end,
+})

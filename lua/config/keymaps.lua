@@ -74,3 +74,12 @@ vim.keymap.set("n", "<leader>uq", function()
 
   vim.cmd("redraw")
 end, { desc = "Master Toggle Autocompletion" })
+
+vim.keymap.set("n", "<space>xa", "", {
+  noremap = true,
+  callback = function()
+    for _, client in ipairs(vim.lsp.get_clients()) do
+      require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
+    end
+  end,
+})
