@@ -31,15 +31,22 @@ return {
     },
     opts = {},
   },
-  "Vigemus/iron.nvim",
-  "neoclide/coc.nvim",
 
   {
-    "stevearc/overseer.nvim",
-    ---@module 'overseer'
-    ---@type overseer.SetupOpts
-    opts = {},
+    {
+      "quarto-dev/quarto-nvim",
+      dependencies = {
+        "jmbuhr/otter.nvim",
+        "nvim-treesitter/nvim-treesitter",
+      },
+    },
   },
+
+  "Vigemus/iron.nvim",
+  "jpalardy/vim-slime",
+  "benlubas/molten-nvim",
+  "neoclide/coc.nvim",
+
   "neomake/neomake",
   "artemave/workspace-diagnostics.nvim",
   {
@@ -287,8 +294,9 @@ return {
           filetypes = { "norg" },
         },
       },
-      max_height_window_percentage = 50,
-      window_overlap_clear_enabled = false,
+      max_height_window_percentage = math.huge, -- this is necessary for a good experience
+      max_width_window_percentage = math.huge,
+      window_overlap_clear_enabled = true,
       window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
       editor_only_render_when_focused = false,
       tmux_show_only_in_active_window = false,
