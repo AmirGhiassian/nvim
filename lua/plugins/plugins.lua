@@ -112,6 +112,96 @@ return {
       rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }, -- Specify LuaRocks packages to install
     },
   },
+  {
+    "stevearc/resession.nvim",
+    opts = {},
+    keys = {
+      { "<leader>Ss", "<cmd>lua require('resession').save()<CR>", desc = "Save Session" },
+      { "<leader>Sl", "<cmd>lua require('resession').load()<CR>", desc = "Load Session" },
+      { "<leader>Sd", "<cmd>lua require('resession').load()<CR>", desc = "Load Session" },
+    },
+    config = function()
+      require("resession").setup({
+        autoload = true, -- Automatically load the last session on startup
+        autosave = {
+          enabled = true,
+          interval = 3,
+          notify = false,
+        },
+        cwd_change_handling = "global", -- Handle directory changes globally
+        post_load_cmds = { "NvimTreeOpen" }, -- Commands to run after loading a session
+      })
+      vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+          -- Only load the session if nvim was started with no args and without reading from stdin
+          if vim.fn.argc(-1) == 0 and not vim.g.using_stdin then
+            -- Save these to a different directory, so our manual sessions don't get polluted
+            resession.load(vim.fn.getcwd(), { dir = "dirsession", silence_errors = true })
+          end
+        end,
+        nested = true,
+      })
+      vim.api.nvim_create_autocmd("VimLeavePre", {
+        callback = function()
+          resession.save(vim.fn.getcwd(), { dir = "dirsession", notify = false })
+        end,
+      })
+      vim.api.nvim_create_autocmd("StdinReadPre", {
+        callback = function()
+          -- Store this for later
+          vim.g.using_stdin = true
+        end,
+      })
+      local function get_session_name()
+        local name = vim.fn.getcwd()
+        local branch = vim.trim(vim.fn.system("git branch --show-current"))
+        if vim.v.shell_error == 0 then
+          return name .. branch
+        else
+          return name
+        end
+      end
+      vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+          -- Only load the session if nvim was started with no args
+          if vim.fn.argc(-1) == 0 then
+            resession.load(get_session_name(), { dir = "dirsession", silence_errors = true })
+          end
+        end,
+      })
+      vim.api.nvim_create_autocmd("VimLeavePre", {
+        callback = function()
+          resession.save(get_session_name(), { dir = "dirsession", notify = false })
+        end,
+      })
+    end,
+  },
+
+  {
+    "okuuva/auto-save.nvim",
+    cmd = "ASToggle", -- optional to trigger on command
+    event = { "InsertLeave", "TextChanged" }, -- optional to trigger on event
+    opts = {
+      -- your config goes here
+    },
+    config = function()
+      require("auto-save").setup({
+        enabled = true,
+        trigger_events = { "InsertLeave", "TextChanged" }, -- Save on normal mode changes
+        condition = function(buf)
+          local fn = vim.fn
+          -- Don't save if file is not modified, readonly, or special
+          if fn.getbufvar(buf, "&modifiable") == 0 then
+            return false
+          end
+          if fn.getbufvar(buf, "&readonly") == 1 then
+            return false
+          end
+          return true
+        end,
+      })
+    end,
+  },
 
   {
     "ravitemer/mcphub.nvim",
