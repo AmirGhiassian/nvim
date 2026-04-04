@@ -45,7 +45,6 @@ return {
   "Vigemus/iron.nvim",
   "jpalardy/vim-slime",
   "benlubas/molten-nvim",
-  "neoclide/coc.nvim",
 
   "neomake/neomake",
   "artemave/workspace-diagnostics.nvim",
