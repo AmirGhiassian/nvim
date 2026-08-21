@@ -31,7 +31,7 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   install = { colorscheme = { "tokyonight", "habamax" } },
-  checker = { enabled = true }, -- automatically check for plugin updates
+  checker = { enabled = false }, -- run :Lazy check manually instead of scanning on every session
   performance = {
     rtp = {
       -- disable some rtp plugins
@@ -48,5 +48,3 @@ require("lazy").setup({
     },
   },
 })
-
-require("telescope").load_extension("vstask")

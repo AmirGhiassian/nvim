@@ -6,9 +6,17 @@ return {
   "EdenEast/nightfox.nvim",
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   { "mg979/vim-visual-multi" },
-  "https://github.com/kdheepak/lazygit.nvim.git",
+  {
+    "https://github.com/kdheepak/lazygit.nvim.git",
+    cmd = { "LazyGit", "LazyGitConfig", "LazyGitCurrentFile", "LazyGitFilter", "LazyGitFilterCurrentFile" },
+  },
   "ThePrimeagen/vim-be-good",
-  "kmontocam/nvim-conda",
+  {
+    "kmontocam/nvim-conda",
+    enabled = function()
+      return vim.fn.executable("conda") == 1
+    end,
+  },
   "s1n7ax/nvim-window-picker",
   "MunifTanjim/prettier.nvim",
   "benknoble/vim-mips",
@@ -206,7 +214,19 @@ return {
     "ravitemer/mcphub.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     build = "npm install -g mcp-hub@latest",
-    config = true,
+    cmd = { "MCPHub" },
+    opts = {
+      extensions = {
+        codecompanion = {
+          show_result_in_chat = true,
+          make_vars = true,
+          make_slash_commands = true,
+        },
+        avante = {
+          make_slash_commands = true,
+        },
+      },
+    },
   },
 
   {
@@ -217,7 +237,7 @@ return {
 
   {
     "yetone/avante.nvim",
-    event = "VeryLazy",
+    cmd = { "AvanteAsk", "AvanteChat", "AvanteEdit", "AvanteRefresh", "AvanteToggle" },
     version = false,
     rag_service = {
       enabled = false,
@@ -239,6 +259,15 @@ return {
     },
     opts = {
       provider = "openai",
+      system_prompt = function()
+        local hub = require("mcphub").get_hub_instance()
+        return hub:get_active_servers_prompt()
+      end,
+      custom_tools = function()
+        return {
+          require("mcphub.extensions.avante").mcp_tool(),
+        }
+      end,
       providers = {
         claude = {
           endpoint = "https://api.anthropic.com",
@@ -312,25 +341,6 @@ return {
   },
 
   {
-    "christoomey/vim-tmux-navigator",
-    cmd = {
-      "TmuxNavigateLeft",
-      "TmuxNavigateDown",
-      "TmuxNavigateUp",
-      "TmuxNavigateRight",
-      "TmuxNavigatePrevious",
-      "TmuxNavigatorProcessList",
-    },
-    keys = {
-      { "<C-h>", "<cmd><C-U>TmuxNavigateLeft<CR>", desc = "Window Left" },
-      { "<C-j>", "<cmd><C-U>TmuxNavigateDown<CR>", desc = "Window Down" },
-      { "<C-k>", "<cmd><C-U>TmuxNavigateUp<CR>", desc = "Window Up" },
-      { "<C-l>", "<cmd><C-U>TmuxNavigateRight<CR>", desc = "Window Right" },
-      { "<C-\\>", "<cmd><C-U>TmuxNavigatePrevious<CR>", desc = "Window Previous" },
-    },
-  },
-
-  {
     "HakonHarnes/img-clip.nvim",
     event = "VeryLazy",
     opts = {
@@ -351,20 +361,119 @@ return {
 
   {
     "stevearc/oil.nvim",
-    opts = {},
+    keys = {
+      { "<leader>fo", "<cmd>Oil<cr>", desc = "Oil (Buffer Directory)" },
+      {
+        "<leader>fO",
+        function()
+          require("oil").open(vim.fn.getcwd())
+        end,
+        desc = "Oil (Working Directory)",
+      },
+    },
+    opts = {
+      -- Keep Oil's built-in mappings and add missing actions under the
+      -- local-leader prefix so regular normal-mode keys are left alone.
+      use_default_keymaps = true,
+      keymaps = {
+        ["<localleader>t"] = { "actions.open_terminal", mode = "n" },
+        ["<localleader>y"] = { "actions.yank_entry", mode = "n" },
+        ["<localleader>c"] = { "actions.copy_to_system_clipboard", mode = "n" },
+        ["<localleader>p"] = { "actions.paste_from_system_clipboard", mode = "n" },
+        ["<localleader>q"] = { "actions.send_to_qflist", mode = "n" },
+        ["<localleader>l"] = {
+          "actions.send_to_qflist",
+          opts = { target = "loclist" },
+          mode = "n",
+        },
+      },
+    },
     dependencies = { { "nvim-mini/mini.icons", opts = {} } },
     lazy = false,
   },
 
   {
     "olimorris/codecompanion.nvim",
-    opts = {},
+    cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionChat", "CodeCompanionCmd" },
+    opts = {
+      adapters = {
+        acp = {
+          codex = function()
+            return require("codecompanion.adapters").extend("codex", {
+              commands = {
+                -- Do not let a shell-level API key override the Codex CLI's
+                -- stored ChatGPT OAuth session.
+                default = {
+                  "env",
+                  "-u",
+                  "OPENAI_API_KEY",
+                  "-u",
+                  "CODEX_API_KEY",
+                  vim.fn.expand("~/.local/bin/codex-acp"),
+                },
+              },
+              defaults = {
+                -- codex-acp advertises this exact ACP method id. The older
+                -- CodeCompanion default uses "chatgpt", which does not match
+                -- and silently falls back to the first method ("api-key").
+                auth_method = "chat-gpt",
+              },
+            })
+          end,
+          gemini_cli = function()
+            return require("codecompanion.adapters").extend("gemini_cli", {
+              commands = {
+                default = { vim.fn.expand("~/.local/bin/gemini"), "--experimental-acp" },
+              },
+              defaults = {
+                auth_method = "oauth-personal",
+              },
+            })
+          end,
+          grok = function()
+            return require("codecompanion.adapters").extend("gemini_cli", {
+              name = "grok",
+              formatted_name = "Grok",
+              commands = {
+                default = { vim.fn.expand("~/.grok/bin/grok"), "agent", "stdio" },
+              },
+              defaults = {
+                -- Reuse the OAuth token saved by `grok login`.
+                auth_method = "cached_token",
+              },
+              env = {},
+            })
+          end,
+        },
+      },
+      strategies = {
+        chat = {
+          adapter = "codex",
+          tools = {
+            mcp = {
+              callback = function()
+                return require("mcphub.extensions.codecompanion")
+              end,
+              description = "Call tools and resources from MCP servers",
+            },
+          },
+        },
+      },
+    },
+    keys = {
+      { "<leader>ac", "<cmd>CodeCompanionChat adapter=codex<cr>", desc = "Chat with Codex" },
+      { "<leader>ag", "<cmd>CodeCompanionChat adapter=gemini_cli<cr>", desc = "Chat with Gemini" },
+      { "<leader>ax", "<cmd>CodeCompanionChat adapter=grok<cr>", desc = "Chat with Grok" },
+    },
     version = "17.33.0",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter" },
   },
 
   {
     "3rd/image.nvim",
+    enabled = function()
+      return vim.env.KITTY_WINDOW_ID ~= nil or vim.env.WEZTERM_PANE ~= nil or vim.env.GHOSTTY_RESOURCES_DIR ~= nil
+    end,
     opts = {
       backend = "kitty",
       integrations = {
@@ -434,5 +543,28 @@ return {
     },
   },
   "j-hui/fidget.nvim",
-  "andweeb/presence.nvim",
+  {
+    "andweeb/presence.nvim",
+    init = function()
+      -- Disable presence.nvim's automatic setup so WSL can use a user-owned
+      -- relay socket instead of the root-owned /var/run path.
+      vim.g.presence_has_setup = 1
+    end,
+    config = function()
+      local presence = require("presence")
+      local default_socket_path = presence.get_discord_socket_path
+
+      function presence:get_discord_socket_path()
+        if self.os and self.os.is_wsl then
+          local runtime_dir = vim.env.XDG_RUNTIME_DIR
+          if runtime_dir and runtime_dir ~= "" then
+            return runtime_dir:gsub("/$", "") .. "/discord-ipc-0"
+          end
+        end
+        return default_socket_path(self)
+      end
+
+      presence.setup()
+    end,
+  },
 }

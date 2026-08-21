@@ -41,19 +41,14 @@ vim.keymap.set("n", "<leader>uq", function()
     cmp.setup({ enabled = enabled })
   end
 
-  -- Copilot
-  if pcall(require, "copilot") then
-    if enabled then
-      vim.cmd("Copilot enable")
-      vim.b.copilot_enabled = true
-    else
-      vim.cmd("Copilot disable")
-      vim.b.copilot_enabled = false
-    end
+  -- Native Copilot inline completion and Sidekick next-edit suggestions
+  if vim.lsp.inline_completion then
+    vim.lsp.inline_completion.enable(enabled)
   end
+  vim.g.sidekick_nes = enabled
 
   -- LSP inlay hints
-  for _, client in ipairs(vim.lsp.get_active_clients()) do
+  for _, client in ipairs(vim.lsp.get_clients()) do
     if client.server_capabilities.inlayHintProvider then
       if enabled then
         vim.lsp.inlay_hint.enable(true)
@@ -73,13 +68,10 @@ vim.keymap.set("n", "<leader>uq", function()
   LazyVim.info(enabled and "Autocompletion enabled" or "Autocompletion disabled", { title = "Toggle" })
 
   vim.cmd("redraw")
-end, { desc = "Master Toggle Autocompletion" })
+end, { desc = "Toggle Completion and AI Suggestions" })
 
-vim.keymap.set("n", "<space>xa", "", {
-  noremap = true,
-  callback = function()
+vim.keymap.set("n", "<leader>xw", function()
     for _, client in ipairs(vim.lsp.get_clients()) do
       require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
     end
-  end,
-})
+end, { desc = "Workspace Diagnostics" })
