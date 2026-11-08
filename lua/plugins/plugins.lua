@@ -409,7 +409,7 @@ return {
                   "OPENAI_API_KEY",
                   "-u",
                   "CODEX_API_KEY",
-                  vim.fn.expand("~/.local/bin/codex-acp"),
+                  "codex-acp",
                 },
               },
               defaults = {
@@ -418,12 +418,24 @@ return {
                 -- and silently falls back to the first method ("api-key").
                 auth_method = "chat-gpt",
               },
+              handlers = {
+                setup = function()
+                  if vim.fn.executable("codex-acp") == 1 then
+                    return true
+                  end
+                  vim.notify(
+                    "CodeCompanion needs codex-acp. Install it with: npm install -g @agentclientprotocol/codex-acp",
+                    vim.log.levels.ERROR
+                  )
+                  return false
+                end,
+              },
             })
           end,
           gemini_cli = function()
             return require("codecompanion.adapters").extend("gemini_cli", {
               commands = {
-                default = { vim.fn.expand("~/.local/bin/gemini"), "--experimental-acp" },
+                default = { "gemini", "--experimental-acp" },
               },
               defaults = {
                 auth_method = "oauth-personal",

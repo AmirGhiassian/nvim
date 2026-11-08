@@ -16,10 +16,10 @@ return {
         watch = true,
         tools = {
           codex = {
-            cmd = { vim.fn.expand("~/.local/bin/codex") },
+            cmd = { "codex" },
           },
           gemini = {
-            cmd = { vim.fn.expand("~/.local/bin/gemini") },
+            cmd = { "gemini" },
           },
           grok = {
             cmd = { vim.fn.expand("~/.grok/bin/grok") },

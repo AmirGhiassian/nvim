@@ -34,19 +34,10 @@ return {
         callback = set_normal_navigation,
       })
 
-      -- The plugin only handles normal mode. Explicitly leave terminal-input
-      -- mode before invoking its commands so no manual Ctrl-\\ Ctrl-n is needed.
-      local terminal_navigation = {
-        ["<C-h>"] = [[<C-\><C-n><Cmd>NvimTmuxNavigateLeft<CR>]],
-        ["<C-j>"] = [[<C-\><C-n><Cmd>NvimTmuxNavigateDown<CR>]],
-        ["<C-k>"] = [[<C-\><C-n><Cmd>NvimTmuxNavigateUp<CR>]],
-        ["<C-l>"] = [[<C-\><C-n><Cmd>NvimTmuxNavigateRight<CR>]],
-        ["<C-Space>"] = [[<C-\><C-n><Cmd>NvimTmuxNavigateNext<CR>]],
-      }
-
-      for key, mapping in pairs(terminal_navigation) do
-        vim.keymap.set("t", key, mapping, { silent = true, desc = "Navigate from terminal mode" })
-      end
+      -- Do not map Ctrl-h/j/k/l in terminal-input mode. This lets terminal
+      -- programs (including a tmux session nested inside ToggleTerm) receive
+      -- those keys directly. Normal mode remains tmux-aware via the mappings
+      -- above; press Esc twice first when you want to navigate from Neovim.
 
       -- A simple alternative to the awkward built-in Ctrl-\\ Ctrl-n chord.
       vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], {

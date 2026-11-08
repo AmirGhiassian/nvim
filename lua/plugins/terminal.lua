@@ -1,3 +1,39 @@
+local terminals = {}
+
+local function toggle_terminal(name, options)
+  if not terminals[name] then
+    terminals[name] = require("toggleterm.terminal").Terminal:new(options)
+  end
+
+  local size = type(options.size) == "function" and options.size() or options.size
+  terminals[name]:toggle(size)
+end
+
+local function terminal_toggle(name, options)
+  return function()
+    toggle_terminal(name, options)
+  end
+end
+
+local floating_terminal = terminal_toggle("floating", {
+  direction = "float",
+  display_name = "Floating Terminal",
+})
+
+local horizontal_terminal = terminal_toggle("horizontal", {
+  direction = "horizontal",
+  size = 15,
+  display_name = "Horizontal Terminal",
+})
+
+local vertical_terminal = terminal_toggle("vertical", {
+  direction = "vertical",
+  size = function()
+    return math.floor(vim.o.columns * 0.4)
+  end,
+  display_name = "Vertical Terminal",
+})
+
 return {
   {
     "akinsho/toggleterm.nvim",
@@ -23,10 +59,12 @@ return {
       },
     },
     keys = {
-      { "<C-/>", "<cmd>1ToggleTerm direction=float<cr>", desc = "Floating Terminal", mode = { "n", "t" } },
-      { "<leader>Tf", "<cmd>1ToggleTerm direction=float<cr>", desc = "Floating Terminal" },
-      { "<leader>Th", "<cmd>2ToggleTerm direction=horizontal size=15<cr>", desc = "Horizontal Terminal" },
-      { "<leader>Tv", "<cmd>3ToggleTerm direction=vertical size=60<cr>", desc = "Vertical Terminal" },
+      { "<C-/>", floating_terminal, desc = "Floating Terminal", mode = { "n", "t" } },
+      { "<M-h>", horizontal_terminal, desc = "Horizontal Terminal", mode = { "n", "t" } },
+      { "<M-v>", vertical_terminal, desc = "Vertical Terminal", mode = { "n", "t" } },
+      { "<leader>Tf", floating_terminal, desc = "Floating Terminal" },
+      { "<leader>Th", horizontal_terminal, desc = "Horizontal Terminal" },
+      { "<leader>Tv", vertical_terminal, desc = "Vertical Terminal" },
       { "<leader>Tt", "<cmd>4ToggleTerm direction=tab<cr>", desc = "Terminal Tab" },
       { "<leader>Ts", "<cmd>TermSelect<cr>", desc = "Select Terminal" },
       { "<leader>Ta", "<cmd>ToggleTermToggleAll<cr>", desc = "Toggle All Terminals" },
